@@ -1,100 +1,71 @@
-import TextField from "@mui/material/TextField";
+import * as React from "react";
 import Button from "@mui/material/Button";
-import SendIcon from "@mui/icons-material/Send";
-import { useState } from "react";
-import axios from "axios";
-import { User } from "../dto/user-dto";
-import { url_api_local } from "../url_base";
-import { DemoContainer } from "@mui/x-date-pickers/internals/demo";
-import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
-import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
-import { DatePicker } from "@mui/x-date-pickers/DatePicker";
-// type Props = {};
+
+import IconButton from "@mui/material/IconButton";
+import OutlinedInput from "@mui/material/OutlinedInput";
+import InputLabel from "@mui/material/InputLabel";
+import InputAdornment from "@mui/material/InputAdornment";
+import FormControl from "@mui/material/FormControl";
+import TextField from "@mui/material/TextField";
+import Visibility from "@mui/icons-material/Visibility";
+import VisibilityOff from "@mui/icons-material/VisibilityOff";
 
 export const Login = () => {
-  const [nombre, setNombre] = useState("");
-  const [apellido, setApellido] = useState("");
-  const [fecha_nacimiento, setFecha_nacimiento] = useState<Date | null>(null);
-  const [telefono, setTelefono] = useState("");
-  const [email, setEmail] = useState("");
+  const [showPassword, setShowPassword] = React.useState(false);
 
-  const handleLogin = async () => {
-    const usuario: User = {
-      nombre: nombre,
-      apellido: apellido,
-      fecha_nacimiento: fecha_nacimiento,
-      telefono: telefono,
-      email: email,
-    };
-    try {
-      const response = await axios.post(`${url_api_local}/user`, usuario);
-      console.log("Respuesta del sevidor", response);
-    } catch (error) {
-      console.error("Error inesperado:", error);
-    }
+  const handleClickShowPassword = () => setShowPassword((show) => !show);
+
+  const handleMouseDownPassword = (
+    event: React.MouseEvent<HTMLButtonElement>
+  ) => {
+    event.preventDefault();
   };
-  const handleDateChange = (newValue: Date | null) => {
-    setFecha_nacimiento(newValue);
-    console.log("Fecha seleccionada:", newValue);
+
+  const handleMouseUpPassword = (
+    event: React.MouseEvent<HTMLButtonElement>
+  ) => {
+    event.preventDefault();
   };
   return (
-    <div className="bg-slate-100  justify-around">
-      <div className="bg-slate-400 text-white p-2">Registro de asistencia</div>
-      <div>
-        <TextField
-          id="outlined-basic"
-          label="Nombre"
-          variant="outlined"
-          value={nombre}
-          onChange={(e) => setNombre(e.target.value)}
-        />
-        <TextField
-          id="outlined-basic"
-          label="Apellido"
-          variant="outlined"
-          value={apellido}
-          onChange={(e) => setApellido(e.target.value)}
-        />
-        {/* <TextField
-          id="outlined-basic"
-          label="Fecha_nacimiento"
-          variant="outlined"
-          value={fecha_nacimiento}
-          onChange={(e) => setFecha_nacimiento(e.target.value)}
-        /> */}
-        <LocalizationProvider dateAdapter={AdapterDayjs}>
-          <DemoContainer components={["DatePicker"]}>
-            <DatePicker
-              label="Fecha de Nacimiento"
-              value={fecha_nacimiento}
-              onChange={handleDateChange}
-              // renderInput={(params) => <TextField {...params} />}
-            />
-          </DemoContainer>
-        </LocalizationProvider>
-        <TextField
-          id="outlined-basic"
-          label="Telefono"
-          variant="outlined"
-          value={telefono}
-          onChange={(e) => setTelefono(e.target.value)}
-        />
+    <div className="flex flex-col justify-center items-center bg-gradient-to-t bg-slate-100 h-screen text-indigo-900 text-center p-2">
+      <div className="font-bold text-3xl">Ingresar</div>
 
-        <TextField
-          id="outlined-basic"
-          label="Email"
-          variant="outlined"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
+      <TextField
+        label="Usuario"
+        id="outlined-start-adornment"
+        sx={{ m: 1, width: "25ch" }}
+        // slotProps={{
+        //   input: {
+        //     startAdornment: (
+        //       <InputAdornment position="start">kg</InputAdornment>
+        //     ),
+        //   },
+        // }}
+      />
+      <FormControl sx={{ m: 1, width: "25ch" }} variant="outlined">
+        <InputLabel htmlFor="outlined-adornment-password">Password</InputLabel>
+        <OutlinedInput
+          id="outlined-adornment-password"
+          type={showPassword ? "text" : "password"}
+          endAdornment={
+            <InputAdornment position="end">
+              <IconButton
+                aria-label="toggle password visibility"
+                onClick={handleClickShowPassword}
+                onMouseDown={handleMouseDownPassword}
+                onMouseUp={handleMouseUpPassword}
+                edge="end"
+              >
+                {showPassword ? <VisibilityOff /> : <Visibility />}
+              </IconButton>
+            </InputAdornment>
+          }
+          label="Password"
         />
-        <Button
-          variant="contained"
-          endIcon={<SendIcon />}
-          onClick={handleLogin}
-        >
-          Send
-        </Button>
-      </div>
+      </FormControl>
+      <Button variant="contained">Iniciar Sesion</Button>
+      <div>¿Eres nuevo?</div>
+      <Button variant="contained">Registrarse</Button>
     </div>
   );
 };

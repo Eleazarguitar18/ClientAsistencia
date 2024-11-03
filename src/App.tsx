@@ -1,11 +1,16 @@
+import { Register } from "./components/auth/Register";
 import { Login } from "./components/auth/Login";
+import { HomePage } from "./components/HomePage";
+import { Route, Routes } from "react-router-dom";
 
-type Props = {};
-
-export const App = (props: Props) => {
+export const App = () => {
   return (
     <div>
-      <Login />
+      <Routes>
+        <Route path="/" element={<HomePage />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/register" element={<Register />} />
+      </Routes>
     </div>
   );
 };
