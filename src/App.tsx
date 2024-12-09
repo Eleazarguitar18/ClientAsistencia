@@ -2,6 +2,7 @@ import { Register } from "./components/auth/Register";
 import { Login } from "./components/auth/Login";
 import { HomePage } from "./components/HomePage";
 import { Route, Routes } from "react-router-dom";
+import { Toaster } from "react-hot-toast";
 
 export const App = () => {
   return (
@@ -11,6 +12,7 @@ export const App = () => {
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
       </Routes>
+      <Toaster />
     </div>
   );
 };

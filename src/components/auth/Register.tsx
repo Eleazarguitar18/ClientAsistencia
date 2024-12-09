@@ -10,6 +10,7 @@ import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import { Dayjs } from "dayjs";
+import toast from "react-hot-toast";
 // type Props = {};
 
 export const Register = () => {
@@ -18,7 +19,8 @@ export const Register = () => {
   const [fecha_nacimiento, setFecha_nacimiento] = useState<Dayjs | null>(null);
   const [telefono, setTelefono] = useState("");
   const [email, setEmail] = useState("");
-
+  // const notify = () => toast.success("Registro exitoso");
+  // const notify=toast
   const handleRegister = async () => {
     const usuario: User = {
       nombre: nombre,
@@ -30,15 +32,30 @@ export const Register = () => {
     console.log(usuario);
 
     try {
-      const response = await axios.post(`${url_api_local}/user`, usuario);
+      const response = await toast.promise(
+        axios.post(`${url_api_local}/user`, usuario),
+        {
+          loading: "Cargando",
+          success: "Se registro correctamente",
+          error: "Error al registrar",
+        }
+      );
       console.log("Respuesta del sevidor", response);
+      if (response.status === 201) {
+        setNombre("");
+        setApellido("");
+        setFecha_nacimiento(null);
+        setTelefono("");
+        setEmail("");
+        // notify();
+      }
     } catch (error) {
       console.error("Error inesperado:", error);
     }
   };
   const handleDateChange = (newValue: Dayjs | null) => {
     setFecha_nacimiento(newValue);
-    console.log("Fecha seleccionada:", newValue);
+    // console.log("Fecha seleccionada:", newValue);
   };
   return (
     <div className="flex flex-col justify-center items-center bg-gradient-to-t bg-slate-100 h-screen text-indigo-900 text-center p-2">
